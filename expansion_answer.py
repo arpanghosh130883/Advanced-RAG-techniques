@@ -117,6 +117,38 @@ retrieved_documents = results["documents"][0]
 
 
 # Passing the retrieved_documents to LLM model ans asking to generate final summary of the original_query
+
+context = "\n\n".join(retrieved_documents)
+ 
+final_prompt = f"""
+You are a helpful financial assistant.
+Answer the question based only on the context below.
+ 
+Context:
+{context}
+ 
+Question:
+{original_query}
+"""
+ 
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+                {
+            "role": "system",
+            "content": final_prompt,
+                },
+        {"role": "user", "content": original_query}
+    ],
+    temperature=0.3
+)
+ 
+answer = response.choices[0].message.content
+print(word_wrap(answer))
+
+
+'''
+# Prabhabakar 
 def summary_generated(query, model="gpt-3.5-turbo"):
     prompt = """You are a helpful expert financial research assistant. 
     Provide a summarized version of the provided text."""
@@ -140,7 +172,7 @@ summarized_answer = summary_generated(Qresults)
 final_result = f"{summarized_answer}"
 
 print(word_wrap(final_result))
-
+'''
 
 
 embeddings = chroma_collection.get(include=["embeddings"])["embeddings"]
