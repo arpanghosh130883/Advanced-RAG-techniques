@@ -115,6 +115,34 @@ retrieved_documents = results["documents"][0]
 #     print(word_wrap(doc))
 #     print("")
 
+
+# Passing the retrieved_documents to LLM model ans asking to generate final summary of the original_query
+def summary_generated(query, model="gpt-3.5-turbo"):
+    prompt = """You are a helpful expert financial research assistant. 
+    Provide a summarized version of the provided text."""
+    
+    messages = [
+        {"role": "system", "content": query},
+        {"role": "user", "content": prompt},
+    ]
+ 
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+    )
+
+    return response.choices[0].message.content
+
+
+
+Qresults = ' '.join([''.join(doc) for doc in retrieved_documents])  # Combine into one string
+summarized_answer = summary_generated(Qresults)
+final_result = f"{summarized_answer}"
+
+print(word_wrap(final_result))
+
+
+
 embeddings = chroma_collection.get(include=["embeddings"])["embeddings"]
 umap_transform = umap.UMAP(random_state=0, transform_seed=0).fit(embeddings)
 projected_dataset_embeddings = project_embeddings(embeddings, umap_transform)
