@@ -138,6 +138,43 @@ for i, documents in enumerate(retrieved_documents):
         print("")
     print("-" * 100)
 
+
+
+# Final passing into LLM to generate the final response
+
+def summary_generated(query, model="gpt-3.5-turbo"):
+    prompt = """You are a helpful expert financial research assistant. 
+    Provide a summarized version of the provided text."""
+    
+    messages = [
+        {"role": "system", "content": query},
+        {"role": "user", "content": prompt},
+    ]
+ 
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages,
+    )
+
+    return response.choices[0].message.content
+
+# 'Code Chaanges by Prabhakar: 7th April 2025'
+# output the results documents
+
+for i, documents in enumerate(retrieved_documents):
+    print(f"Query: {joint_query[i]}")
+    print("")
+    print("Results:")
+    Qresults = ' '.join([''.join(doc) for doc in documents])  # Combine into one string
+    summarized_answer = summary_generated(Qresults)
+    final_result = f"{summarized_answer}"
+    print(word_wrap(final_result))
+    #     print(word_wrap(doc))
+    #     print("")
+    print("-" * 100)
+
+
+'''
 embeddings = chroma_collection.get(include=["embeddings"])["embeddings"]
 umap_transform = umap.UMAP(random_state=0, transform_seed=0).fit(embeddings)
 projected_dataset_embeddings = project_embeddings(embeddings, umap_transform)
@@ -194,3 +231,4 @@ plt.gca().set_aspect("equal", "datalim")
 plt.title(f"{original_query}")
 plt.axis("off")
 plt.show()  # display the plot
+'''
