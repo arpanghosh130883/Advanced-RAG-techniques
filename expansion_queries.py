@@ -162,9 +162,9 @@ def summary_generated(query, model="gpt-3.5-turbo"):
 # output the results documents
 
 for i, documents in enumerate(retrieved_documents):
-    print(f"Query: {joint_query[i]}")
-    print("")
-    print("Results:")
+    #print(f"Query: {joint_query[i]}")
+    #print("")
+    #print("Results:")
     Qresults = ' '.join([''.join(doc) for doc in documents])  # Combine into one string
     summarized_answer = summary_generated(Qresults)
     final_result = f"{summarized_answer}"
