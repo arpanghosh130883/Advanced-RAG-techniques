@@ -158,7 +158,7 @@ def summary_generated(query, model="gpt-3.5-turbo"):
 
     return response.choices[0].message.content
 
-# 'Code Chaanges by Prabhakar: 7th April 2025'
+
 # output the results documents
 
 for i, documents in enumerate(retrieved_documents):
